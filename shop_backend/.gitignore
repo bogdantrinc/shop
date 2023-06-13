@@ -1,0 +1,14 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+.cache/
+.local/
+
+# Environments
+.env
+
+# Databases
+db/002-dump.sql
+pgdata
+
+# Images
+media/profiles/

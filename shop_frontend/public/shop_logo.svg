@@ -1,0 +1,9 @@
+<svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .heavy {
+      font: bold 80px sans-serif;
+      fill: white;
+    }
+  </style>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" class="heavy">Shop</text>
+</svg>

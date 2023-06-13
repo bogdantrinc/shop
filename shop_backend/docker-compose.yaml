@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  db:
+    container_name: shop-db
+    image: postgres
+    shm_size: 2g
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${SHOP_DB_PG_NAME}
+      POSTGRES_USER: ${SHOP_DB_PG_USER}
+      POSTGRES_PASSWORD: ${SHOP_DB_PG_PASSWORD}
+      POSTGRES_INITDB_ARGS: --data-checksums
+    volumes:
+      - "./db:/docker-entrypoint-initdb.d"
+      - "./pgdata:/var/lib/postgresql/data"
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${SHOP_DB_PG_USER} -d ${SHOP_DB_PG_NAME}'"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+  web:
+    container_name: shop-backend
+    image: shop-backend
+    command: local-web
+    ports: 
+      - "8000:8000"
+    environment:
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
+      PYTHONDONTWRITEBYTECODE: 1
+      PYTHONFAULTHANDLER: 1
+    volumes:
+      - .:/home/shop
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db:
+
+networks: 
+  default:
+    driver: bridge

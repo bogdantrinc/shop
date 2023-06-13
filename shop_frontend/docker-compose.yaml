@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+  development:
+    build:
+      context: .
+      dockerfile: ./docker/development/Dockerfile
+    container_name: shop-frontend-dev
+    image: shop-frontend-dev
+    ports: 
+      - "$PORT:$PORT"
+    volumes:
+      - .:/shop
+    command: ["npm", "run", "dev"]
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: development
+      NEXT_MANUAL_SIG_HANDLE: true
+  production:
+    build:
+      context: .
+      dockerfile: ./docker/production/Dockerfile
+    container_name: shop-frontend
+    image: shop-frontend
+    ports: 
+      - "$PORT:$PORT"
+    command: ["node", "server.js"]
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      NEXT_MANUAL_SIG_HANDLE: true
+      NEXT_TELEMETRY_DISABLED: 1
+
+networks: 
+  default:
+    driver: bridge
